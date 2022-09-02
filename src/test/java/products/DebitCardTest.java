@@ -19,30 +19,29 @@ class DebitCardTest {
     AccountOperator accountOperator;
     String cardName;
 
+    DebitCard debitCard;
+
     @BeforeEach
-    void prepareTestInfo(){
+    void prepareTestInfo() {
         this.bankAccount = new BankAccount(BigDecimal.valueOf(Faker.instance().number().randomDouble(2, 20000, 4000000)), Currency.RUB.name());
         this.cardName = Faker.instance().funnyName().name();
         this.accountOperator = new AccountOperator(this.bankAccount);
+
+        this.debitCard = new DebitCard(this.accountOperator, this.cardName);
     }
 
     @Test
     void getBalance() {
-        var debitCard = new DebitCard(accountOperator, cardName);
-
         assertThat(debitCard.getBalance(), Matchers.comparesEqualTo(accountOperator.getBalance()));
     }
 
     @Test
     void nameCheck() {
-        var debitCard = new DebitCard(accountOperator, cardName);
-
         assertEquals(cardName, debitCard.name);
     }
 
     @Test
     void writeOff() {
-        var debitCard = new DebitCard(accountOperator, cardName);
         var currentBalance = debitCard.getBalance();
         var sumToWriteOff = BigDecimal.valueOf(555);
 
@@ -54,7 +53,6 @@ class DebitCardTest {
 
     @Test
     void replenish() {
-        var debitCard = new DebitCard(accountOperator, cardName);
         var sumToReplenish = BigDecimal.valueOf(9235);
         var currentBalance = debitCard.getBalance();
 
